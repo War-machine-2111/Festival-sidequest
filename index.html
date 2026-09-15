@@ -1,0 +1,45 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festival Sidequest</title>
+  <style>
+    body { background: #121218; color: #fff; font-family: sans-serif; text-align: center; padding: 2rem; }
+    .card { background: #1e1b2e; border: 2px solid #a855f7; border-radius: 16px; padding: 2rem; max-width: 400px; margin: 2rem auto; box-shadow: 0 0 20px #a855f755; }
+    h1 { color: #c084fc; font-size: 1.5rem; }
+    #quest { font-size: 1.25rem; min-height: 80px; margin: 1.5rem 0; font-weight: bold; }
+    button { background: #a855f7; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>SIDEQUEST ACCEPTED</h1>
+    <div id="quest">Loading quest...</div>
+    <button onclick="getQuest()">Reroll Quest</button>
+  </div>
+  <script>
+    const quests = [
+      "Find a Waldo or Jesus",
+      "Gift a piece of kandi or a trinket to someone dancing like nobody's watching.",
+      "Hydrate check: find 3 people and make sure everyone takes a sip of water.",
+      "Tell someone their outfit or totem made your night.",
+      "Teach a stranger your favorite signature dance move.",
+      "Gift a bracelet to someone without Kandi",
+      "Headbang on the rail",
+      "Pick up 1 dropped item from the pit (water bottle, pashmina, phone, etc",
+      "lock eyes with a stranger during a bass drop and match their BASS FACE",
+      "challenge a new friend to a game of rock paper scissors (loser goes to the pit)",
+      "gift kandi or a trinket to security working behind the rail",
+      "offer to hold someones totem for 30 seconds so they can rest their arms",
+      "Trade a piece of kandi with someone who has mushrooms on their outfit",
+      "Find camp OG and dance to a throwback jam",
+    ];
+    function getQuest() {
+      const random = quests[Math.floor(Math.random() * quests.length)];
+      document.getElementById('quest').innerText = random;
+    }
+    getQuest();
+  </script>
+</body>
+</html>
