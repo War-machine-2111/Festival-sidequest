@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,40 +10,127 @@
     h1 { color: #c084fc; font-size: 1.5rem; }
     #quest { font-size: 1.25rem; min-height: 80px; margin: 1.5rem 0; font-weight: bold; }
     button { background: #a855f7; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    footer { margin-top: 1.5rem; font-size: 0.95rem; }
+    footer a { color: #c084fc; text-decoration: none; font-weight: bold; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>SIDEQUEST ACCEPTED</h1>
-    <div id="quest">Loading quest...</div>
-    <button onclick="getQuest()">Reroll Quest</button>
+
+ <div class="card">
+  <h1>SIDEQUEST ACTIVATED</h1>
+  <div id="quest">Tap below to accept your festival sidequest!</div>
+  <button id="rerollBtn" onclick="rerollQuest()">Start Sidequest</button>
+  <div id="timer" style="margin-top: 12px; font-size: 0.9rem; color: #a855f7;"></div>
   </div>
+
+  <footer>
+    <p style="color: #94a3b8;">Tag me in your stories on Instagram!</p>
+    <a href="https://instagram.com/war_machine_art" target="_blank" rel="noopener noreferrer">@war_machine_art</a>
+  </footer>
+
   <script>
-    const quests = [
-      "Find a Waldo, Jesus or a spiderman",
-      "Gift a piece of kandi or a trinket to someone dancing like nobody's watching.",
-      "Hydrate check: find 3 people and make sure everyone takes a sip of water.",
-      "Tell someone their outfit or totem made your night.",
-      "Teach a stranger your favorite signature dance move.",
-      "Gift a bracelet or trinket to someone without Kandi",
-      "Headbang on the rail",
-      "Pick up 1 dropped item from the ground (water bottle, pashmina, phone, etc",
-      "lock eyes with a stranger during a bass drop and match their BASS FACE",
-      "challenge a new friend to a game of rock paper scissors",
-      "gift kandi or a trinket to security working behind the rail",
-      "offer to hold someones totem for 30 seconds so they can rest their arms",
-      "Trade a piece of kandi with someone who has mushrooms on their outfit",
-      "Spot someone sitting down looking overwhelmed, offer them a water, and make sure they're doing okay",
-      "Synchronize a massive slow-motion headbang with a stranger",
-      "Ask 2 people to Teach you how to Dougie",
-      
-    ];
-    function getQuest() {
-      const random = quests[Math.floor(Math.random() * quests.length)];
-      document.getElementById('quest').innerText = random;
+const quests = [
+  "Find a Waldo, Jesus or a spiderman",
+  "Gift a piece of kandi or a trinket to someone dancing like nobody's watching.",
+  "Hydrate check: find 3 people and make sure everyone takes a sip of water.",
+  "Tell someone their outfit or totem made your night.",
+  "Teach a stranger your favorite signature dance move.",
+  "Gift a bracelet or trinket to someone without Kandi",
+  "Headbang on the rail",
+  "Pick up 1 dropped item from the ground (water bottle, pashmina, phone, etc)",
+  "Lock eyes with a stranger during a bass drop and match their BASS FACE",
+  "Challenge a new friend to a game of rock paper scissors",
+  "Gift kandi or a trinket to security working behind the rail",
+  "Offer to hold someone's totem for 30 seconds so they can rest their arms",
+  "Trade a piece of kandi with someone who has mushrooms on their outfit",
+  "Spot someone sitting down looking overwhelmed, offer them a water, and make sure they're doing okay",
+  "Synchronize a massive slow-motion headbang with a stranger",
+  "Ask 2 people to Teach you how to Dougie"
+];
+
+const COOLDOWN_MINUTES = 2; // Set your preferred cooldown duration
+const COOLDOWN_MS = COOLDOWN_MINUTES * 60 * 1000;
+let timerInterval;
+
+function getRandomQuest() {
+  return quests[Math.floor(Math.random() * quests.length)];
+}
+
+function initQuest() {
+  const savedQuest = localStorage.getItem('currentQuest');
+  const lockUntil = parseInt(localStorage.getItem('lockUntil'), 10);
+  const now = Date.now();
+
+  const btn = document.getElementById('rerollBtn');
+
+  // If a quest was already running and cooldown is still active
+  if (savedQuest && lockUntil && now < lockUntil) {
+    document.getElementById('quest').innerText = savedQuest;
+    btn.innerText = "Reroll Quest";
+    startCountdown(lockUntil);
+  } else if (savedQuest) {
+    // A quest was previously rolled, but the timer has expired
+    document.getElementById('quest').innerText = savedQuest;
+    btn.innerText = "Reroll Quest";
+    document.getElementById('timer').innerText = "Cooldown expired! You may reroll.";
+  } else {
+    // Brand new first visit: no quest generated yet
+    btn.innerText = "Start Sidequest";
+  }
+}
+
+function assignNewQuest() {
+  const newQuest = getRandomQuest();
+  const lockUntil = Date.now() + COOLDOWN_MS;
+
+  localStorage.setItem('currentQuest', newQuest);
+  localStorage.setItem('lockUntil', lockUntil);
+
+  document.getElementById('quest').innerText = newQuest;
+  document.getElementById('rerollBtn').innerText = "Reroll Quest";
+  startCountdown(lockUntil);
+}
+
+function rerollQuest() {
+  const lockUntil = parseInt(localStorage.getItem('lockUntil'), 10);
+  if (!lockUntil || Date.now() >= lockUntil) {
+    assignNewQuest();
+  }
+}
+
+function startCountdown(endTime) {
+  const btn = document.getElementById('rerollBtn');
+  const timerDisplay = document.getElementById('timer');
+
+  btn.disabled = true;
+  btn.style.opacity = "0.5";
+  btn.style.cursor = "not-allowed";
+
+  clearInterval(timerInterval);
+
+  function update() {
+    const remaining = endTime - Date.now();
+
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.style.cursor = "pointer";
+      timerDisplay.innerText = "Cooldown expired! You may reroll.";
+    } else {
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      timerDisplay.innerText = `Cooldown: ${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s remaining`;
     }
-    getQuest();
+  }
+
+  update();
+  timerInterval = setInterval(update, 1000);
+}
+
+// Check state on page load
+initQuest();
+
   </script>
 </body>
 </html>
-Tag me in your stories @war_machine_art
