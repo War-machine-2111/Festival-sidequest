@@ -4,7 +4,7 @@ An interactive festival project combining handmade paracord kandi with embedded 
 
 ---
 
-## 🎯 The Vision
+## 🎯 Whats it for?
 
 Festivals are built on connection, shared energy, and spontaneous interactions. This project takes traditional kandi trading into the digital realm without requiring apps or account logins:
 
@@ -24,9 +24,9 @@ Festivals are built on connection, shared energy, and spontaneous interactions. 
 
 ## 👤 About me
 
-Created by **Mike Rhodes** (War Machine Art). 
+Created by **James Rhodes** (War Machine Art). 
 
 * **Art & Projects:** [@war_machine_art](https://instagram.com/war_machine_art)
-* **What I Do:** Maker, artist, and bass enthusiast exploring creative hardware tinkering, paracord crafting, and interactive festival gear.
+* **What I Do:** i just enjoy making things!
 
 If you caught me at a festival and traded for one of these bracelets, welcome to your sidequest. Drink some water, look out for the people around you, and have an incredible time.
